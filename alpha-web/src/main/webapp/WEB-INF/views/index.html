@@ -35,6 +35,7 @@
     };
     
     var map_icon = 'static/img/Car_50.png';
+    var my_car_icon = 'static/img/Car_25.png';
 	  var all_markers= [];
       
        function auto_update(){
@@ -51,6 +52,14 @@
                     };
                     
             map.setCenter(pos);
+
+              var marker = new google.maps.Marker({
+                  position: {lat:parseFloat(pos.lat), lng:parseFloat(pos.lng)},
+                  map: map,
+                  icon : my_car_icon
+              });
+
+              all_markers.push(marker);
            
       	   $.ajax({
      		   url: "api/driver/saveDetails",
@@ -63,9 +72,14 @@
                  
       	   
     	   $.ajax({
-     		   url: "api/findAll",
+     		   url: "api/driver/findAll",
      		   success: function(others_pos) {
      	            for(i=0;i < others_pos.length; ++i){
+
+     	                if (others_pos[i].ipAddress == myIP) {
+     	                  continue;
+                        }
+
      	                var marker = new google.maps.Marker({
      	                    position: {lat:parseFloat(others_pos[i].lat), lng:parseFloat(others_pos[i].lng)},
      	                    map: map,
@@ -86,7 +100,7 @@
        function initMap() {
     	   window.map = new google.maps.Map(document.getElementById('map'), {
                center: {lat: 52.3105419, lng: 4.7660857},
-               zoom: 18,
+               zoom: 20,
                mapTypeControlOptions: {
             	      mapTypeIds: []
             	    },
@@ -172,7 +186,8 @@
                         }
                       ]
              });
-    	   setInterval(auto_update, 5000);
+    	   auto_update();
+    	   setInterval(auto_update, 10000);
        }
 
     </script>

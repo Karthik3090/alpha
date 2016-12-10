@@ -35,7 +35,7 @@ public class SampleRestController {
     }
 
     @RequestMapping(value = "driver/saveDetails", method = GET)
-    public Driver save(String my_ip, String lat, String lng, String name) {
+    public Driver save(String my_ip, String lat, String lng) {
         Driver driver = null;
         Optional<Driver> optionalDriver = getMatchedDriver(my_ip);
         if (optionalDriver.isPresent()) {
@@ -46,7 +46,7 @@ public class SampleRestController {
         }
         else {
             driver = new Driver();
-            driver.setName(name);
+            driver.setName("name");
             driver.setLat(lat);
             driver.setLng(lng);
             driver.setLastUpdateTime(LocalDateTime.now());
@@ -77,7 +77,7 @@ public class SampleRestController {
             station = optionalStation.get();
             Optional<Driver> driver = getMatchedDriver(my_ip);
             if (driver.isPresent()) {
-                station.setDriver(driver.get());
+                station.setDriverId(driver.get().getId().intValue());
                 station.setAvailability("blocked");
             }
             return stationPoleRepository.save(station);
@@ -92,7 +92,7 @@ public class SampleRestController {
         if (optionalStation.isPresent()) {
             station = optionalStation.get();
             station.setAvailability("available");
-            station.setDriver(null);
+            station.setDriverId(0);
         }
         return stationPoleRepository.save(station);
     }

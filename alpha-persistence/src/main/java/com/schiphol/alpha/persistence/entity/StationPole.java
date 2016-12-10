@@ -22,7 +22,5 @@ public class StationPole {
     private String lat;
     private String lng;
     private String availability;
-    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER, orphanRemoval = false)
-    @PrimaryKeyJoinColumn
-    private Driver driver;
+    private int driverId;
 }

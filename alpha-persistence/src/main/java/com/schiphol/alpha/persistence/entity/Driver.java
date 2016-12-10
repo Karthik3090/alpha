@@ -20,6 +20,5 @@ public class Driver {
     private String lat;
     private String lng;
     private LocalDateTime lastUpdateTime;
-    @OneToOne(mappedBy = "driver")
-    private StationPole stationPole;
+
 }
