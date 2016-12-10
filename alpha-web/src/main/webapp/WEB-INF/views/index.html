@@ -34,7 +34,7 @@
         pc.onicecandidate = noop;
     };
     
-    var map_icon = 'static/img/Car_50.png';
+    var other_car_icon = 'static/img/Car_50.png';
     var my_car_icon = 'static/img/Car_25.png';
 	  var all_markers= [];
       
@@ -69,7 +69,6 @@
      			   lng : pos.lng
      		   }
      		 });
-                 
       	   
     	   $.ajax({
      		   url: "api/driver/findAll",
@@ -83,7 +82,7 @@
      	                var marker = new google.maps.Marker({
      	                    position: {lat:parseFloat(others_pos[i].lat), lng:parseFloat(others_pos[i].lng)},
      	                    map: map,
-     	                    icon : map_icon
+     	                    icon : other_car_icon
      	                  });	
      	                
      	                all_markers.push(marker);
@@ -195,6 +194,24 @@
                         }
                       ]
              });
+    	   
+    	   $.ajax({
+     		   url: "api/station/findAll",
+     		   success: function(stations) {
+     			   var charge_available = "static/img/c_green.png";
+     			   var charge_occupied ="static/img/c_red.png";
+     			   
+     	            for(i=0;i < stations.length; ++i){
+
+     	                var marker = new google.maps.Marker({
+     	                    position: {lat:parseFloat(stations[i].lat), lng:parseFloat(stations[i].lng)},
+     	                    map: map,
+     	                    icon :  (stations.availability == "available")  ? charge_available : charge_occupied
+     	                  });	
+     	            }
+     		   }
+     	      });
+    	   
     	   auto_update();
     	   setInterval(auto_update, 10000);
        }
