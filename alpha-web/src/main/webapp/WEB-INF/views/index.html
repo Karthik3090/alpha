@@ -31,8 +31,6 @@
         pc.onicecandidate = noop;
     };
     
-    var other_car_icon = 'static/img/Car_50.gif';
-    var my_car_icon = 'static/img/Car_25.gif';
 	  window.all_markers= [];
       
        function auto_update(){
@@ -57,7 +55,7 @@
               var marker = new google.maps.Marker({
                   position: {lat:parseFloat(pos.lat), lng:parseFloat(pos.lng)},
                   map: map,
-                  icon : my_car_icon
+                  icon : 'static/img/Car_25.gif'
               });
 
               window.all_markers.push(marker);
@@ -83,7 +81,7 @@
      	                var marker = new google.maps.Marker({
      	                    position: {lat:parseFloat(others_pos[i].lat), lng:parseFloat(others_pos[i].lng)},
      	                    map: map,
-     	                    icon : other_car_icon
+     	                    icon : 'static/img/Car_50.gif'
      	                  });
 
                         window.all_markers.push(marker);
@@ -92,7 +90,7 @@
      	           var marker = new google.maps.Marker({
                        position: {lat:parseFloat(pos.lat), lng:parseFloat(pos.lng)},
                        map: map,
-                       icon : my_car_icon
+                       icon : 'static/img/Car_25.gif'
                    });
 
                    window.all_markers.push(marker);
