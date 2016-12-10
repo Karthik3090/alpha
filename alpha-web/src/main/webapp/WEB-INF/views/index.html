@@ -88,6 +88,14 @@
      	                
      	                all_markers.push(marker);
      	            }
+     	            
+     	           var marker = new google.maps.Marker({
+                       position: {lat:parseFloat(pos.lat), lng:parseFloat(pos.lng)},
+                       map: map,
+                       icon : my_car_icon
+                   });
+
+                   all_markers.push(marker);
      		   }
      	      });
             
@@ -101,6 +109,7 @@
     	   window.map = new google.maps.Map(document.getElementById('map'), {
                center: {lat: 52.3105419, lng: 4.7660857},
                zoom: 20,
+               streetViewControl: false,
                mapTypeControlOptions: {
             	      mapTypeIds: []
             	    },
