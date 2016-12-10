@@ -8,7 +8,7 @@ body{
 nav{ background:#000;} 
 .blue-grey.darken-1{background:#333 !important}
 nav .button-collapse{padding-left:10px;}
-.side-nav{ background-color:#000; border-right:1px solid #d4d4d4;}
+.side-nav{ background-color:#fff; border-right:1px solid #d4d4d4;}
 nav .brand-logo { color:#d4d4d4}
 /*****Footer Colour Set-up*/
 #footer{xborder-top:1px solid #d4d4d4; } 
@@ -24,9 +24,10 @@ nav .brand-logo { color:#d4d4d4}
 .pageEase{
 transition-timing-function: ease;
 }
+.userView .white-text{color:#000 !important;}
 
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-floating){color:#97cf30}
-
+.background img{height:100%;}
 @media (-webkit-min-device-pixel-ratio: 2), 
 (min-resolution: 192dpi) { 
 
