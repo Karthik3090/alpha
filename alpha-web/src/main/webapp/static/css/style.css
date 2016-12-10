@@ -1,8 +1,11 @@
-
+body{
+	background:#000;
+}
 #outerwrap{ xbackground:#000;}
 /*Header Colour Change*/
-nav{background-color:#ffb300;} 
-
+nav{background-color:#000;} 
+nav .button-collapse{padding-left:10px;}
+.side-nav{ background-color:#000; border-right:1px solid #ccc;}
 /*****Footer Colour Set-up*/
 #footer{border-top:1px solid #ffb300; } 
 #footer  i{ color:#ffb300; padding-top:5px; }
