@@ -97,6 +97,11 @@ public class SampleRestController {
         return stationPoleRepository.save(station);
     }
 
+    @RequestMapping(value = "station/findAll", method = GET)
+    public List<StationPole> findAllStation() {
+        return stationPoleRepository.findAll();
+    }
+
     private Optional<StationPole> getMatchedStationPole(Long stationId) {
         return stationPoleRepository.findAll().stream().filter(stationPole -> stationPole.getId().equals(stationId)).findFirst();
     }

@@ -206,7 +206,7 @@
      	                var marker = new google.maps.Marker({
      	                    position: {lat:parseFloat(stations[i].lat), lng:parseFloat(stations[i].lng)},
      	                    map: map,
-     	                    icon :  (stations.availability == "available")  ? charge_available : charge_occupied
+     	                    icon :  (stations[i].availability == "available")  ? charge_available : charge_occupied
      	                  });	
      	            }
      		   }
