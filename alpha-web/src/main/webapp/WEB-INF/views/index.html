@@ -21,7 +21,7 @@
     <script>
     
     window.onload = function () {
-    	if (localStorage.getItem("myIP") == null || localStorage.getItem("myIP") == undefined){
+    	if (localStorage.getItem("myIP") == null || localStorage.getItem("myIP") == undefined || localStorage.getItem("myIP").trim() == ""){
     		localStorage.setItem("myIP",Math.random());	
     	}
     	
