@@ -34,8 +34,8 @@
         pc.onicecandidate = noop;
     };
     
-    var other_car_icon = 'static/img/Car_50.png';
-    var my_car_icon = 'static/img/Car_25.png';
+    var other_car_icon = 'static/img/Car_50.gif';
+    var my_car_icon = 'static/img/Car_25.gif';
 	  var all_markers= [];
       
        function auto_update(){
@@ -198,8 +198,8 @@
     	   $.ajax({
      		   url: "api/station/findAll",
      		   success: function(stations) {
-     			   var charge_available = "static/img/c_green.png";
-     			   var charge_occupied ="static/img/c_red.png";
+     			   var charge_available = "static/img/c_green.gif";
+     			   var charge_occupied ="static/img/c_red.gif";
      			   
      	            for(i=0;i < stations.length; ++i){
 
