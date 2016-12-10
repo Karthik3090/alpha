@@ -36,3 +36,12 @@ transition-timing-function: ease;
         background-size: 375px 667px;
     }
 }
+
+#map {
+	height: 100%;
+}
+
+#headMap {
+	height: 50%;
+	width: 50%;
+}
