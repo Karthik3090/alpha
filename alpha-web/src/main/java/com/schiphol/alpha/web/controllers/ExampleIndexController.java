@@ -13,9 +13,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Slf4j
 public class ExampleIndexController {
 
-    @RequestMapping(value = "/", method = GET)
+    @RequestMapping(value = "/maps", method = GET)
     public String showIndex(Model model) throws Exception {
         return "index";
+    }
+
+    @RequestMapping(value="/", method = GET)
+    public String showIndexNew() throws Exception {
+        return "index_new";
     }
 
     @RequestMapping(value = "/test-error", method = GET)
