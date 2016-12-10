@@ -1,6 +1,7 @@
 package com.schiphol.alpha.persistence.entity;
 
 import java.time.LocalDateTime;
+import javax.persistence.OneToOne;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -19,4 +20,6 @@ public class Driver {
     private String lat;
     private String lng;
     private LocalDateTime lastUpdateTime;
+    @OneToOne(mappedBy = "driver")
+    private StationPole stationPole;
 }
