@@ -26,9 +26,9 @@ public class SampleRestController {
     private StationPoleRepository stationPoleRepository;
 
     @RequestMapping(value = "driver/saveDetails", method = GET)
-    public Driver save(String my_ip, String lat, String lng) {
-        if (null != my_ip) {
-            Driver optionalDriver = driverRepository.findByIpAddress(my_ip);
+    public Driver save(String emailId, String lat, String lng) {
+        if (null != emailId) {
+            Driver optionalDriver = driverRepository.findByEmailId(emailId);
             if (null != optionalDriver) {
                 optionalDriver.setLat(lat);
                 optionalDriver.setLng(lng);
@@ -39,7 +39,7 @@ public class SampleRestController {
                 optionalDriver.setLat(lat);
                 optionalDriver.setLng(lng);
                 optionalDriver.setLastUpdateTime(LocalDateTime.now());
-                optionalDriver.setIpAddress(my_ip);
+                optionalDriver.setEmailId(emailId);
             }
             return driverRepository.save(optionalDriver);
         }
@@ -52,8 +52,8 @@ public class SampleRestController {
     }
 
     @RequestMapping(value = "driver/getDriverDetail", method = GET)
-    public Driver findDriverInfo(String name) {
-        return driverRepository.findByName(name);
+    public Driver findDriverInfo(String emailId) {
+        return driverRepository.findByEmailId(emailId);
     }
 
     @RequestMapping(value = "station/saveStationDetails", method = GET)
@@ -66,12 +66,12 @@ public class SampleRestController {
     }
 
     @RequestMapping(value = "station/updateStationDetails", method = GET)
-    public StationPole updateStationDetails(Long stationId, String name) {
-        Driver driver = driverRepository.findByName(name);
+    public StationPole updateStationDetails(Long stationId, String emailId) {
+        Driver driver = driverRepository.findByEmailId(emailId);
         if (null != driver) {
-            StationPole station = stationPoleRepository.findByDriverId(driver.getId());
-            if (null != station && station.getId().equals(stationId)) {
-                station.setDriverId(driver.getId());
+            StationPole station = stationPoleRepository.findOne(stationId);
+            if (null != station) {
+                station.setBlockedByEmailId(driver.getEmailId());
                 station.setAvailability("blocked");
                 return stationPoleRepository.save(station);
             }
@@ -81,11 +81,10 @@ public class SampleRestController {
 
     @RequestMapping(value = "station/makeStationAvailable", method = GET)
     public StationPole makeStationAvailable(Long stationId) {
-        StationPole station = null;
         StationPole optionalStation = stationPoleRepository.findOne(stationId);
         if (null != optionalStation) {
             optionalStation.setAvailability("available");
-            optionalStation.setDriverId(Long.parseLong("0"));
+            optionalStation.setBlockedByEmailId(null);
             return stationPoleRepository.save(optionalStation);
         }
         return null;

@@ -22,7 +22,7 @@ public class StationPole {
     private String lat;
     private String lng;
     private String availability;
-    private Long driverId;
+    private String blockedByEmailId;
     @ElementCollection(fetch= FetchType.EAGER)
     private List<String> emailIds = new ArrayList<>();
 }

@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface StationPoleRepository extends JpaRepository<StationPole, Long> {
-    StationPole findByDriverId(Long id);
+    StationPole findByBlockedByEmailId(String emailId);
 }
