@@ -7,11 +7,10 @@ import com.schiphol.alpha.persistence.entity.StationPole;
 import com.schiphol.alpha.persistence.repository.DriverRespository;
 import com.schiphol.alpha.persistence.repository.StationPoleRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javax.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,43 +20,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/")
 public class SampleRestController {
-    @Autowired
+    @Resource
     private DriverRespository driverRepository;
     @Resource
     private StationPoleRepository stationPoleRepository;
 
-    @RequestMapping(value = "add/{property}", method = GET)
-    public Driver create(@PathVariable("property") String propertyValue) {
-        final Driver driver = new Driver();
-        driver.setName("Sample");
-        driverRepository.save(driver);
-        return driverRepository.save(driver);
-    }
-
     @RequestMapping(value = "driver/saveDetails", method = GET)
     public Driver save(String my_ip, String lat, String lng) {
-        Driver driver = null;
-        Optional<Driver> optionalDriver = getMatchedDriver(my_ip);
-        if (optionalDriver.isPresent()) {
-            driver = optionalDriver.get();
-            driver.setLat(lat);
-            driver.setLng(lng);
-            driver.setLastUpdateTime(LocalDateTime.now());
+        if (null != my_ip) {
+            Driver optionalDriver = driverRepository.findByIpAddress(my_ip);
+            if (null != optionalDriver) {
+                optionalDriver.setLat(lat);
+                optionalDriver.setLng(lng);
+                optionalDriver.setLastUpdateTime(LocalDateTime.now());
+            }
+            else {
+                optionalDriver = new Driver();
+                optionalDriver.setLat(lat);
+                optionalDriver.setLng(lng);
+                optionalDriver.setLastUpdateTime(LocalDateTime.now());
+                optionalDriver.setIpAddress(my_ip);
+            }
+            return driverRepository.save(optionalDriver);
         }
-        else {
-            driver = new Driver();
-            driver.setName("name");
-            driver.setLat(lat);
-            driver.setLng(lng);
-            driver.setLastUpdateTime(LocalDateTime.now());
-            driver.setIpAddress(my_ip);
-        }
-        return driverRepository.save(driver);
+        return null;
     }
 
     @RequestMapping(value = "driver/findAll", method = GET)
     public List<Driver> findAll() {
         return driverRepository.findAll();
+    }
+
+    @RequestMapping(value = "driver/getDriverDetail", method = GET)
+    public Driver findDriverInfo(String name) {
+        return driverRepository.findByName(name);
     }
 
     @RequestMapping(value = "station/saveStationDetails", method = GET)
@@ -70,17 +66,15 @@ public class SampleRestController {
     }
 
     @RequestMapping(value = "station/updateStationDetails", method = GET)
-    public StationPole updateStationDetails(Long stationId, String my_ip) {
-        StationPole station = null;
-        Optional<StationPole> optionalStation = getMatchedStationPole(stationId);
-        if (optionalStation.isPresent()) {
-            station = optionalStation.get();
-            Optional<Driver> driver = getMatchedDriver(my_ip);
-            if (driver.isPresent()) {
-                station.setDriverId(driver.get().getId().intValue());
+    public StationPole updateStationDetails(Long stationId, String name) {
+        Driver driver = driverRepository.findByName(name);
+        if (null != driver) {
+            StationPole station = stationPoleRepository.findByDriverId(driver.getId());
+            if (null != station && station.getId().equals(stationId)) {
+                station.setDriverId(driver.getId());
                 station.setAvailability("blocked");
+                return stationPoleRepository.save(station);
             }
-            return stationPoleRepository.save(station);
         }
         return null;
     }
@@ -88,26 +82,42 @@ public class SampleRestController {
     @RequestMapping(value = "station/makeStationAvailable", method = GET)
     public StationPole makeStationAvailable(Long stationId) {
         StationPole station = null;
-        Optional<StationPole> optionalStation = getMatchedStationPole(stationId);
-        if (optionalStation.isPresent()) {
-            station = optionalStation.get();
-            station.setAvailability("available");
-            station.setDriverId(0);
+        StationPole optionalStation = stationPoleRepository.findOne(stationId);
+        if (null != optionalStation) {
+            optionalStation.setAvailability("available");
+            optionalStation.setDriverId(Long.parseLong("0"));
+            return stationPoleRepository.save(optionalStation);
         }
-        return stationPoleRepository.save(station);
+        return null;
+    }
+
+    @RequestMapping(value = "station/addnotificationList", method = GET)
+    public StationPole addNotificationList(Long stationId, String emailId) {
+        StationPole optionalStation = stationPoleRepository.findOne(stationId);
+        if (null != optionalStation) {
+            if (CollectionUtils.isEmpty(optionalStation.getEmailIds())) {
+                optionalStation.setEmailIds(new ArrayList<>());
+            }
+            optionalStation.getEmailIds().add(emailId);
+            return stationPoleRepository.save(optionalStation);
+        }
+        return null;
+
+    }
+
+    @RequestMapping(value = "station/getnotificationList", method = GET)
+    public List<String> getNotificationList(Long stationId) {
+        StationPole optionalStation = stationPoleRepository.findOne(stationId);
+        if (null != optionalStation) {
+            return optionalStation.getEmailIds();
+        }
+        return null;
+
     }
 
     @RequestMapping(value = "station/findAll", method = GET)
     public List<StationPole> findAllStation() {
         return stationPoleRepository.findAll();
-    }
-
-    private Optional<StationPole> getMatchedStationPole(Long stationId) {
-        return stationPoleRepository.findAll().stream().filter(stationPole -> stationPole.getId().equals(stationId)).findFirst();
-    }
-
-    private Optional<Driver> getMatchedDriver(String my_ip) {
-        return driverRepository.findAll().stream().filter(driverRepo -> driverRepo.getIpAddress().equals(my_ip)).findFirst();
     }
 
 }

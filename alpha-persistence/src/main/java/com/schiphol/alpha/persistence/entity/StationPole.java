@@ -1,16 +1,16 @@
 package com.schiphol.alpha.persistence.entity;
 
-import javax.persistence.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import lombok.Data;
 
 /**
- * Created by Karthik on 12/10/2016.
+ * Created by Karthik
  */
 @Entity
 @Data
@@ -22,5 +22,7 @@ public class StationPole {
     private String lat;
     private String lng;
     private String availability;
-    private int driverId;
+    private Long driverId;
+    @ElementCollection(fetch= FetchType.EAGER)
+    private List<String> emailIds = new ArrayList<>();
 }
